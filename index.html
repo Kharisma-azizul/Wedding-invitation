@@ -408,7 +408,7 @@ tick();setInterval(tick,1000);
 
 /* kanvas 390x844 yang diskalakan seragam: proporsi sama di HP, tablet, dan desktop */
 function fit(){var vw=innerWidth,vh=innerHeight,DW=390,DH=844,s,ch;
- if(vw/vh<.6){s=vw/DW;ch=Math.max(620,Math.min(1000,vh/s))}else{s=Math.min(vw/DW,vh/DH);ch=DH}
+ if(vw/vh<.85){s=vw/DW;ch=Math.max(620,Math.min(1000,vh/s))}else{s=Math.min(vw/DW,vh/DH);ch=DH}
  s=Math.min(s,vh/ch,vw/DW);window.FS=s;
  var r=document.documentElement.style;r.setProperty("--s",s);r.setProperty("--ch",ch+"px");if(window.fitPages&&window.pages&&pages.length)fitPages()}
 fit();addEventListener("resize",fit);addEventListener("orientationchange",fit);
@@ -519,12 +519,12 @@ function copyText(s){function old(){try{var a=document.createElement("textarea")
  if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(s).then(function(){return true},function(){return old()});
  return Promise.resolve(old())}
 function closeSheet(){$("sheet").classList.remove("show")}
-function sheet(title,items,url){var s=$("sheet");s.innerHTML="";
+function sheet(title,items,url,msg){var s=$("sheet");s.innerHTML="";
  var h=document.createElement("b");h.textContent=title;s.appendChild(h);
- var p=document.createElement("p");p.textContent="Undangan ini dibuka di dalam aplikasi, jadi sebagian aplikasi lain tidak bisa dibuka langsung. Pilih salah satu cara berikut:";s.appendChild(p);
+ var p=document.createElement("p");p.textContent=msg||"Undangan ini dibuka di dalam aplikasi, jadi sebagian aplikasi lain tidak bisa dibuka langsung. Pilih salah satu cara berikut:";s.appendChild(p);
  items.forEach(function(it){var a;
   if(it.copy){a=document.createElement("button");a.type="button";a.className="btn o";a.textContent=it.label;a.onclick=function(){copyText(it.copy).then(function(ok){a.textContent=ok?"Tautan disalin ✓":"Salin manual dari kotak di bawah"})}}
-  else{a=document.createElement("a");a.className="btn";a.textContent=it.label;a.href=it.href;a.target="_blank";a.rel="noopener noreferrer";if(it.download)a.download=it.download}
+  else{a=document.createElement("a");a.className="btn";a.textContent=it.label;a.href=it.href;if(!it.same){a.target="_blank";a.rel="noopener noreferrer"}if(it.download)a.download=it.download}
   s.appendChild(a)});
  if(url){var i=document.createElement("input");i.readOnly=true;i.value=url;i.setAttribute("aria-label","Tautan");i.onfocus=function(){i.select()};s.appendChild(i)}
  var c=document.createElement("button");c.type="button";c.className="btn o";c.textContent="Tutup";c.onclick=closeSheet;s.appendChild(c);s.classList.add("show")}
@@ -542,9 +542,12 @@ function saveDate(){
  var icsUrl=function(){return URL.createObjectURL(new Blob([icsText()],{type:"text/calendar;charset=utf-8"}))};
  function pilih(){sheet("Simpan Tanggal",[{label:"Buka Google Calendar",href:gcal},{label:"Unduh file kalender (.ics)",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"},{label:"Salin tautan kalender",copy:gcal}],gcal)}
  function web(){var w=null;try{w=window.open(gcal,"_blank");if(w)w.opener=null}catch(x){}if(!w)pilih()}
- if(IOS){   /* iPhone/iPad */
-  if(embedded){pilih();return}
-  location.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(icsText());return}   /* di Safari: langsung buka Kalender Apple */
+ if(IOS){   /* iPhone/iPad: lembar pilihan dengan tautan sentuh asli (location.href ke data: sering diblokir Safari tanpa pesan) */
+  sheet("Simpan Tanggal",[
+   {label:"Tambah ke Kalender iPhone",href:"data:text/calendar;charset=utf-8,"+encodeURIComponent(icsText()),same:true},
+   {label:"Buka Google Calendar",href:gcal},
+   {label:"Unduh file kalender (.ics)",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"}
+  ],null,"Pilih salah satu cara untuk menyimpan tanggal acara ke kalender Anda:");return}
  if(/Android/i.test(ua)){   /* Android: buka layar "acara baru" di aplikasi kalender bawaan HP */
   var it="intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;S.title="+encodeURIComponent(ttl)+";S.eventLocation="+encodeURIComponent(CONFIG.venue)+";S.description="+encodeURIComponent(det)+";l.beginTime="+s.getTime()+";l.endTime="+e.getTime()+";B.allDay=false;end";
   var left=false,h=function(){if(document.hidden)left=true};document.addEventListener("visibilitychange",h);
