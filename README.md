@@ -1,3 +1,3 @@
 # kharisma-azizul
 
-Undangan pernikahan Kharisma & Azizul.
+Undangan Pernikahan Kharisma & Azizul.
