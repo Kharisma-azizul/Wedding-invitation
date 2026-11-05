@@ -422,7 +422,7 @@ pages.forEach(function(p,i){var b=document.createElement("button");b.type="butto
  b.onclick=function(){go(i)};tabs.appendChild(b)});
 var tb=Q("button",tabs);
 pages.forEach(function(p){p.insertAdjacentHTML("beforeend",'<i class="gt" aria-hidden="true"><b></b></i><i class="gb" aria-hidden="true"><b></b></i>')});
-function setOn(i){var old=cur;cur=i;wind(old,i);
+function setOn(i){var old=cur;cur=i;closeSheet();wind(old,i);
  if(pages[old]&&pages[old].id=="p-gift"&&old!=i)Q(".pan").forEach(function(x){x.classList.remove("show")});pages.forEach(function(p,j){p.classList.toggle("on",j==i)});
  tb.forEach(function(b,j){b.classList.toggle("on",j==i)});
  var b=tb[i];tabs.scrollTo({left:b.offsetLeft-(tabs.clientWidth-b.offsetWidth)/2,behavior:"smooth"})}
@@ -540,13 +540,12 @@ function saveDate(){
  var gcal="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(ttl)+"&dates="+z(s)+"/"+z(e)+"&details="+encodeURIComponent(det)+"&location="+encodeURIComponent(CONFIG.venue);
  function icsText(){return "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Undangan//ID\r\nBEGIN:VEVENT\r\nUID:"+z(s)+"@undangan\r\nDTSTAMP:"+z(new Date())+"\r\nSUMMARY:"+ttl+"\r\nDTSTART:"+z(s)+"\r\nDTEND:"+z(e)+"\r\nLOCATION:"+CONFIG.venue.replace(/,/g,"\\,")+"\r\nDESCRIPTION:"+det.replace(/\n/g,"\\n")+"\r\nBEGIN:VALARM\r\nTRIGGER:-P1D\r\nACTION:DISPLAY\r\nDESCRIPTION:"+ttl+"\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR"}
  var icsUrl=function(){return URL.createObjectURL(new Blob([icsText()],{type:"text/calendar;charset=utf-8"}))};
- function pilih(){sheet("Simpan Tanggal",[{label:"Buka Google Calendar",href:gcal},{label:"Unduh file kalender (.ics)",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"},{label:"Salin tautan kalender",copy:gcal}],gcal)}
+ function pilih(){sheet("Simpan Tanggal",[{label:"Buka Google Calendar",href:gcal},{label:"Tambah ke Kalender",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"},{label:"Salin tautan kalender",copy:gcal}],gcal)}
  function web(){var w=null;try{w=window.open(gcal,"_blank");if(w)w.opener=null}catch(x){}if(!w)pilih()}
  if(IOS){   /* iPhone/iPad: lembar pilihan dengan tautan sentuh asli (location.href ke data: sering diblokir Safari tanpa pesan) */
   sheet("Simpan Tanggal",[
-   {label:"Tambah ke Kalender iPhone",href:"data:text/calendar;charset=utf-8,"+encodeURIComponent(icsText()),same:true},
    {label:"Buka Google Calendar",href:gcal},
-   {label:"Unduh file kalender (.ics)",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"}
+   {label:"Tambah ke Kalender",href:icsUrl(),download:"pernikahan-kharisma-azizul.ics"}
   ],null,"Pilih salah satu cara untuk menyimpan tanggal acara ke kalender Anda:");return}
  if(/Android/i.test(ua)){   /* Android: buka layar "acara baru" di aplikasi kalender bawaan HP */
   var it="intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/event;S.title="+encodeURIComponent(ttl)+";S.eventLocation="+encodeURIComponent(CONFIG.venue)+";S.description="+encodeURIComponent(det)+";l.beginTime="+s.getTime()+";l.endTime="+e.getTime()+";B.allDay=false;end";
