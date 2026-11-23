@@ -20,7 +20,9 @@ body{display:flex;align-items:center;justify-content:center;background:#fbf3d9;c
 a{color:#7b5232}
 </style>
 <script>
-// Pindah ke undangan sambil membawa nama tamu (?to=...)
+// Pindah ke undangan sambil membawa seluruh parameter link:
+//   ?to=Nama Tamu          -> nama tamu
+//   &u=k                   -> versi saudara dekat (akad + resepsi); tanpa u=k = tamu umum (resepsi saja)
 location.replace("undangan.html" + location.search + location.hash);
 </script>
 </head>

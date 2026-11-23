@@ -290,15 +290,15 @@ img{pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user
 </div></div></section>
 
 <section class="page" id="p-akad" data-ic="cal" data-t="Agenda"><div class="card arc"><div class="in sp">
-  <h2 class="t" style="--d:.25s;margin-bottom:.4rem">Akad Nikah</h2>
-  <div class="z" style="--d:.4s"><div class="dt"><span class="dw sm"></span><div class="mid"><b class="dd"></b><span class="dy sm"></span></div><span class="dm sm"></span></div></div>
-  <p class="z" style="--d:.5s">Pukul 09.00 – 11.00 WIB</p>
+  <h2 class="t kk" style="--d:.25s;margin-bottom:.4rem">Akad Nikah</h2>
+  <div class="z kk" style="--d:.4s"><div class="dt"><span class="dw sm"></span><div class="mid"><b class="dd"></b><span class="dy sm"></span></div><span class="dm sm"></span></div></div>
+  <p class="z kk" style="--d:.5s">Pukul 09.00 – 11.00 WIB</p>
   <h2 class="t" style="--d:.7s;margin:1rem 0 .4rem">Resepsi</h2>
   <div class="z" style="--d:.85s"><div class="dt"><span class="dw sm"></span><div class="mid"><b class="dd"></b><span class="dy sm"></span></div><span class="dm sm"></span></div></div>
   <p class="z" style="--d:.95s">Pukul 11.00 – 14.00 WIB</p>
   <div class="b" style="--d:1.1s"><p class="loc">Lokasi Acara</p>
   <p><b>Kafe Halaman Tujuh</b></p><p class="sm">Jl. Raya Southcity Selatan, Pd. Cabe Udik, South City Selatan, Kota Tangerang Selatan</p>
-  <div class="cd" data-k="akad"></div>
+  <div class="cd" data-k="resepsi"></div>
   <p style="margin-top:.9rem"><a class="btn o" href="#" id="calA">Simpan Tanggal</a></p></div>
 </div></div></section>
 
@@ -398,6 +398,9 @@ var CONFIG={
 };
 /* ============================= */
 var $=function(i){return document.getElementById(i)},Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
+/* versi undangan: ?u=k = saudara dekat (akad + resepsi); tanpa u=k = tamu umum (resepsi saja) */
+var FAM=false;try{FAM=new URLSearchParams(location.search).get("u")==="k"}catch(e){}
+if(FAM){Q(".cd").forEach(function(c){c.dataset.k="akad"})}else{Q(".kk").forEach(function(e){e.remove()})}
 var D=new Date(CONFIG.date),L=function(o){return D.toLocaleDateString("id-ID",o)};
 Q(".dtxt").forEach(function(e){e.textContent=L({day:"numeric",month:"long",year:"numeric"})});
 Q(".dw").forEach(function(e){e.textContent=L({weekday:"long"})});
@@ -544,8 +547,8 @@ function openLink(u,title){   /* buka tautan di browser; bila diblokir tampilkan
 
 /* kalender, hadiah, ucapan */
 function saveDate(){
- var z=function(d){return d.toISOString().replace(/[-:]|\.\d+/g,"")},s=new Date(CONFIG.akad),e=new Date(CONFIG.resepsiEnd),ua=navigator.userAgent;
- var ttl="Pernikahan Kharisma & Azizul",det="Akad Nikah: 09.00 – 11.00 WIB\nResepsi: 11.00 – 14.00 WIB\nKafe Halaman Tujuh";
+ var z=function(d){return d.toISOString().replace(/[-:]|\.\d+/g,"")},s=new Date(FAM?CONFIG.akad:CONFIG.resepsi),e=new Date(CONFIG.resepsiEnd),ua=navigator.userAgent;
+ var ttl="Pernikahan Kharisma & Azizul",det=(FAM?"Akad Nikah: 09.00 – 11.00 WIB\n":"")+"Resepsi: 11.00 – 14.00 WIB\nKafe Halaman Tujuh";
  var gcal="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(ttl)+"&dates="+z(s)+"/"+z(e)+"&details="+encodeURIComponent(det)+"&location="+encodeURIComponent(CONFIG.venue);
  function icsText(){return "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Undangan//ID\r\nBEGIN:VEVENT\r\nUID:"+z(s)+"@undangan\r\nDTSTAMP:"+z(new Date())+"\r\nSUMMARY:"+ttl+"\r\nDTSTART:"+z(s)+"\r\nDTEND:"+z(e)+"\r\nLOCATION:"+CONFIG.venue.replace(/,/g,"\\,")+"\r\nDESCRIPTION:"+det.replace(/\n/g,"\\n")+"\r\nBEGIN:VALARM\r\nTRIGGER:-P1D\r\nACTION:DISPLAY\r\nDESCRIPTION:"+ttl+"\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR"}
  var icsUrl=function(){return URL.createObjectURL(new Blob([icsText()],{type:"text/calendar;charset=utf-8"}))};
