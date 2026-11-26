@@ -29,8 +29,8 @@
 html,body{height:100%}
 body{position:fixed;inset:0;background:var(--bgc);color:var(--ink);font:400 .92rem/1.6 Arimo,Arial,Helvetica,sans-serif;overflow:hidden}
 .app::before{content:"";position:absolute;inset:0;background:var(--bg) center/cover;opacity:var(--bgo)}
-.app{background:var(--appc);position:absolute;left:50%;top:50%;width:390px;height:var(--ch,844px);margin:calc(var(--ch,844px)/-2) 0 0 -195px;transform:scale(var(--s,1));transform-origin:50% 50%;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
-.pages{position:absolute;inset:0;overflow:hidden;z-index:1}
+.app{background:var(--appc);position:absolute;left:50%;top:50%;width:390px;height:var(--ch,844px);margin:calc(var(--ch,844px)/-2) 0 0 -195px;transform:scale(var(--s,1));transform-origin:50% 50%;overflow:hidden;overflow:clip;box-shadow:0 0 0 1px var(--line)}
+.pages{position:absolute;inset:0;overflow:hidden;overflow:clip;z-index:1}
 .page{position:absolute;inset:0;padding:.5rem .8rem calc(var(--tab) + env(safe-area-inset-bottom,0px));visibility:hidden;pointer-events:none;transition:visibility 0s 1.05s}
 .page.on{visibility:visible;pointer-events:auto;transition:visibility 0s}
 .page:not(.on) .card{visibility:hidden}
@@ -233,6 +233,79 @@ img{pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;user
 .mapfb b{font-size:.86rem}.mapfb span{font-size:.72rem;color:var(--muted);line-height:1.35}
 .fr .ph iframe{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.in,.sp .t,.sp .b,.sp .s,.sp .f,.sp .z,.sp .d,.sp .u,#tabs button,.gt,.gb{transition:none!important}}
+
+/* ===================== MODE LAYAR LEBAR (PC / LAPTOP / TABLET LANDSCAPE) =====================
+   Kanvas mengikuti rasio monitor; halaman jadi 2 kolom; hiasan diulang & dicerminkan agar tidak melar. */
+.gt b i,.gb b i{display:none}
+html.dk{font-size:18px;--gh:calc(var(--oh)*.93);--bh:calc(var(--oh)*.93);--ph:calc(var(--ch,720px) - 100px - var(--oh,115px)*1.21)}
+html.dk .app{width:var(--cw,1280px);height:var(--ch,720px);margin:calc(var(--ch,720px)/-2) 0 0 calc(var(--cw,1280px)/-2)}
+html.dk .app::before,html.dk .app::after{content:"";position:absolute;background:var(--bg) center top/cover;opacity:var(--bgo)}
+html.dk .app::before{inset:0 50% 0 0}
+html.dk .app::after{inset:0 0 0 50%;transform:scaleX(-1)}
+html.dk .gt b,html.dk .gb b{display:flex;background:none}
+html.dk .gt b i,html.dk .gb b i{display:block;flex:1 1 0;min-width:0}
+html.dk .gt b i{background:var(--garland) top/100% 100% no-repeat}
+html.dk .gb b i{background:var(--border) bottom/100% 100% no-repeat}
+html.dk .gt b i.m,html.dk .gb b i.m{transform:scaleX(-1)}
+html.dk .gt b{height:var(--oh);top:calc(var(--oh)*-.093)}
+html.dk .gb b{height:calc(var(--oh)*.988)}
+html.dk .page{padding:.6rem 1.2rem calc(var(--tab) + env(safe-area-inset-bottom,0px))}
+html.dk .card{border-radius:30px}
+html.dk .arc{border-radius:120px 120px 30px 30px}
+html.dk .in{max-width:1160px;padding:calc(var(--gh)*.6) 2rem calc(var(--bh)*.7);display:grid;grid-template-columns:1fr 1fr;column-gap:3rem;row-gap:.4rem;align-items:center}
+html.dk h2{font-size:1.9rem}
+html.dk .sm{font-size:.95rem}
+html.dk .btn{font-size:.9rem}
+html.dk #tabs button{flex:1 1 0;font-size:.72rem;margin:6px 4px}
+html.dk .fabs{right:1.6rem}
+html.dk .lkt .lk{width:min(100%,300px);height:auto}
+html.dk .lkd .lk{width:min(100%,310px);height:auto}
+html.dk .fr.cover{width:calc((var(--ph) - 50px)*1.0338);max-width:none;max-height:none}
+html.dk .fr.salam{width:calc(var(--ph)*.70644)}
+html.dk .fr.arch{width:calc(var(--ph)*.58644)}
+html.dk .fr.quotes{width:calc(var(--ph)*.97253)}
+html.dk .fr.maps{width:min(100%,calc((var(--ph) - 60px)*1.5457))}
+html.dk .names{font-size:2.6rem}
+html.dk #p-thanks .names{font-size:2.6rem!important}
+html.dk .person .script,html.dk #p-bride .script,html.dk #p-groom .script{font-size:2.1rem!important}
+html.dk .person .sm{font-size:1.05rem}
+html.dk .qt{font-size:1rem;line-height:1.65}
+/* home */
+html.dk #p-open .t{grid-column:1;grid-row:1/span 2}
+html.dk #p-open .z{grid-column:2;grid-row:1;align-self:end}
+html.dk #p-open .b{grid-column:2;grid-row:2;align-self:start}
+/* salam / bride / groom / quotes: foto kiri, teks kanan (groom dibalik) */
+html.dk #p-groom .t{order:2}
+/* agenda */
+html.dk #p-akad .in{grid-auto-flow:column;grid-template-rows:auto auto auto}
+html.dk #p-akad .in>.b{grid-row:1/span 3;align-self:center}
+html.dk.fam #p-akad .in{grid-template-columns:1fr 1fr 1fr;column-gap:2rem}
+/* maps */
+html.dk #p-maps .in{grid-template-columns:1.5fr 1fr}
+/* love story: 2x2 */
+html.dk #p-story .in,html.dk #p-gallery .in,html.dk #p-rsvp .in,html.dk #p-gift .in,html.dk #p-thanks .in{grid-template-columns:1fr}
+html.dk #p-thanks .in{max-width:780px}
+html.dk #p-story .tl{grid-template-columns:1fr 1fr;gap:1.2rem 3rem;margin:.6rem 0 0;padding:0;border:0;width:100%}
+html.dk #p-story .tl>div{border-left:2px solid var(--line);padding-left:.75rem}
+html.dk #p-story .tl .po{font-size:.92rem;line-height:1.55}
+html.dk #p-story .tl .st{font-size:1rem}
+html.dk #p-story .tl h3{font-size:1.05rem}
+html.dk #p-story .tl>div:last-child .po{padding-right:0}
+/* gallery: 5 foto dalam satu baris */
+html.dk .gal2{width:100%;max-width:none;grid-template-columns:1fr 1fr 1.6fr 1fr 1fr;grid-auto-rows:calc(var(--ph) - 70px);gap:10px;margin-top:.7rem}
+html.dk .gal2 .gc,html.dk .gal2 .gc.wd{grid-column:auto;aspect-ratio:auto}
+/* rsvp: formulir kiri, ucapan kanan */
+html.dk #p-rsvp .b{display:grid;grid-template-columns:1fr 1fr;column-gap:2.5rem;align-items:start;width:100%}
+html.dk #p-rsvp form{grid-column:1;grid-row:1/span 2}
+html.dk #p-rsvp #rs{grid-column:1;grid-row:3}
+html.dk #p-rsvp .b:has(#wishes:empty){grid-template-columns:minmax(0,540px);justify-content:center}
+html.dk #p-rsvp #wishes{grid-column:2;grid-row:1/span 3;max-height:calc(var(--ph) - 170px);margin-top:.8rem}
+/* gift: kartu berjajar */
+html.dk #g1.show,html.dk #g1.mz{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start}
+html.dk #g2.show,html.dk #g2.mz{max-width:620px;margin-left:auto;margin-right:auto}
+/* popup */
+html.dk .sheet{left:calc(50% - 220px);right:auto;width:440px}
+html.dk .qvc{width:min(100%,440px)}
 </style>
 </head>
 <body>
@@ -399,7 +472,7 @@ var CONFIG={
 /* ============================= */
 var $=function(i){return document.getElementById(i)},Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
 /* versi undangan: ?u=k = saudara dekat (akad + resepsi); tanpa u=k = tamu umum (resepsi saja) */
-var FAM=false;try{FAM=new URLSearchParams(location.search).get("u")==="k"}catch(e){}
+var FAM=false;try{FAM=new URLSearchParams(location.search).get("u")==="k"}catch(e){}if(FAM)document.documentElement.classList.add("fam");
 if(FAM){Q(".cd").forEach(function(c){c.dataset.k="akad"})}else{Q(".kk").forEach(function(e){e.remove()})}
 var D=new Date(CONFIG.date),L=function(o){return D.toLocaleDateString("id-ID",o)};
 Q(".dtxt").forEach(function(e){e.textContent=L({day:"numeric",month:"long",year:"numeric"})});
@@ -419,10 +492,16 @@ tick();setInterval(tick,1000);
 
 
 /* kanvas 390x844 yang diskalakan seragam: proporsi sama di HP, tablet, dan desktop */
-function fit(){var vw=innerWidth,vh=innerHeight,DW=390,DH=844,s,ch;
- if(vw/vh<.85){s=vw/DW;ch=Math.max(620,Math.min(1000,vh/s))}else{s=Math.min(vw/DW,vh/DH);ch=DH}
+function fit(){var vw=innerWidth,vh=innerHeight,DW=390,DH=844,s,ch,dk=vw>=900&&vw/vh>=1.15;
+ /* layar lebar (PC/laptop): kanvas lebarnya mengikuti rasio monitor (tinggi 560-900), lalu diskalakan pas satu layar */
+ if(dk){s=vw/1280;ch=Math.max(560,Math.min(900,vh/s));s=vh/ch;DW=vw/s}
+ else if(vw/vh<.85){s=vw/DW;ch=Math.max(620,Math.min(1000,vh/s))}else{s=Math.min(vw/DW,vh/DH);ch=DH}
  s=Math.min(s,vh/ch,vw/DW);window.FS=s;
- var r=document.documentElement.style;r.setProperty("--s",s);r.setProperty("--ch",ch+"px");if(window.fitPages&&window.pages&&pages.length)fitPages()}
+ var d=document.documentElement,r=d.style;d.classList.toggle("dk",dk);
+ if(dk){var n=Math.max(3,2*Math.round((DW*1.08/(.64*ch)-1)/2)+1);window.ON=n;r.setProperty("--cw",DW+"px");r.setProperty("--oh",(DW*1.08/n/4)+"px")}else{window.ON=3}
+ r.setProperty("--s",s);r.setProperty("--ch",ch+"px");orn();if(window.fitPages&&window.pages&&pages.length)fitPages()}
+/* hiasan atas/bawah: diulang & dicerminkan bergantian (hanya tampil di mode layar lebar) */
+function orn(){var n=window.ON||3;Q(".gt b,.gb b").forEach(function(b){if(b.children.length===n)return;b.innerHTML="";for(var i=0;i<n;i++){var e=document.createElement("i");if(i%2)e.className="m";b.appendChild(e)}})}
 fit();addEventListener("resize",fit);addEventListener("orientationchange",fit);
 if(window.visualViewport)visualViewport.addEventListener("resize",fit);
 document.addEventListener("fullscreenchange",fit);
@@ -433,12 +512,15 @@ pages.forEach(function(p,i){var b=document.createElement("button");b.type="butto
  b.innerHTML='<svg><use href="#i-'+p.dataset.ic+'"/></svg><span>'+p.dataset.t+'</span>';
  b.onclick=function(){go(i)};tabs.appendChild(b)});
 var tb=Q("button",tabs);
-pages.forEach(function(p){p.insertAdjacentHTML("beforeend",'<i class="gt" aria-hidden="true"><b></b></i><i class="gb" aria-hidden="true"><b></b></i>')});
+pages.forEach(function(p){p.insertAdjacentHTML("beforeend",'<i class="gt" aria-hidden="true"><b></b></i><i class="gb" aria-hidden="true"><b></b></i>')});orn();
 function setOn(i){var old=cur;cur=i;closeSheet();wind(old,i);
  if(pages[old]&&pages[old].id=="p-gift"&&old!=i)Q(".pan").forEach(function(x){x.classList.remove("show")});pages.forEach(function(p,j){p.classList.toggle("on",j==i)});
  tb.forEach(function(b,j){b.classList.toggle("on",j==i)});
  var b=tb[i];tabs.scrollTo({left:b.offsetLeft-(tabs.clientWidth-b.offsetWidth)/2,behavior:"smooth"})}
 var opened=false,app=document.querySelector(".app");
+/* cegah .app bergeser (scroll) sendiri di layar pendek/PC: bilah tab & halaman tetap pas */
+app.addEventListener("scroll",function(){app.scrollTop=0;app.scrollLeft=0});
+P.addEventListener("scroll",function(){P.scrollTop=0;P.scrollLeft=0});
 function go(i){if(!opened||i<0||i>=pages.length||i==cur||lock)return;lock=true;setOn(i);setTimeout(function(){lock=false},700)}
 function step(d){go(cur+d)}
 function room(dir,tg){var c=pages[cur].querySelector(".card"),w=tg&&tg.closest&&tg.closest("#wishes");
